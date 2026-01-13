@@ -35,8 +35,13 @@ class Cxg < Formula
     bin.install Dir["cxg-*"].first => "cxg"
   end
 
-  def post_install
-    system bin/"cxg", "template", "update" rescue nil
+  def caveats
+    <<~EOS
+      To download vulnerability detection templates, run:
+        cxg template update
+
+      Templates will be installed to ~/.cert-x-gen/templates/
+    EOS
   end
 
   test do
