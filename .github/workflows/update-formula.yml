@@ -1,0 +1,104 @@
+name: Update Formula
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to update to (e.g., 1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download SHA256SUMS
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          curl -fsSL -o SHA256SUMS \
+            "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v${VERSION}/SHA256SUMS"
+          cat SHA256SUMS
+
+      - name: Extract checksums
+        id: checksums
+        run: |
+          echo "DARWIN_AMD64=$(grep 'cxg-darwin-amd64$' SHA256SUMS | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "DARWIN_ARM64=$(grep 'cxg-darwin-arm64$' SHA256SUMS | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "LINUX_AMD64=$(grep 'cxg-linux-amd64$' SHA256SUMS | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "LINUX_ARM64=$(grep 'cxg-linux-arm64$' SHA256SUMS | awk '{print $1}')" >> $GITHUB_OUTPUT
+
+      - name: Update formula
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          
+          # Create updated formula
+          cat > Formula/cxg.rb << 'EOF'
+          # typed: false
+          # frozen_string_literal: true
+
+          # Homebrew formula for CERT-X-GEN (cxg)
+          # A polyglot execution engine for vulnerability detection
+          class Cxg < Formula
+            desc "Polyglot execution engine for vulnerability detection"
+            homepage "https://github.com/Bugb-Technologies/cert-x-gen"
+            version "VERSION_PLACEHOLDER"
+            license "Apache-2.0"
+
+            on_macos do
+              on_intel do
+                url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/vVERSION_PLACEHOLDER/cxg-darwin-amd64"
+                sha256 "DARWIN_AMD64_PLACEHOLDER"
+              end
+              on_arm do
+                url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/vVERSION_PLACEHOLDER/cxg-darwin-arm64"
+                sha256 "DARWIN_ARM64_PLACEHOLDER"
+              end
+            end
+
+            on_linux do
+              on_intel do
+                url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/vVERSION_PLACEHOLDER/cxg-linux-amd64"
+                sha256 "LINUX_AMD64_PLACEHOLDER"
+              end
+              on_arm do
+                url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/vVERSION_PLACEHOLDER/cxg-linux-arm64"
+                sha256 "LINUX_ARM64_PLACEHOLDER"
+              end
+            end
+
+            def install
+              bin.install Dir["cxg-*"].first => "cxg"
+            end
+
+            def post_install
+              system bin/"cxg", "template", "update" rescue nil
+            end
+
+            test do
+              assert_match "cxg", shell_output("#{bin}/cxg --version")
+            end
+          end
+          EOF
+          
+          # Replace placeholders
+          sed -i "s/VERSION_PLACEHOLDER/${VERSION}/g" Formula/cxg.rb
+          sed -i "s/DARWIN_AMD64_PLACEHOLDER/${{ steps.checksums.outputs.DARWIN_AMD64 }}/g" Formula/cxg.rb
+          sed -i "s/DARWIN_ARM64_PLACEHOLDER/${{ steps.checksums.outputs.DARWIN_ARM64 }}/g" Formula/cxg.rb
+          sed -i "s/LINUX_AMD64_PLACEHOLDER/${{ steps.checksums.outputs.LINUX_AMD64 }}/g" Formula/cxg.rb
+          sed -i "s/LINUX_ARM64_PLACEHOLDER/${{ steps.checksums.outputs.LINUX_ARM64 }}/g" Formula/cxg.rb
+          
+          cat Formula/cxg.rb
+
+      - name: Commit and push
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add Formula/cxg.rb
+          git commit -m "Update cxg to v${VERSION}"
+          git push
