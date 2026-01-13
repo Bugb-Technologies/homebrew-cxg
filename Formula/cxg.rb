@@ -23,11 +23,11 @@ class Cxg < Formula
   on_linux do
     on_intel do
       url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.0.0/cxg-linux-amd64"
-      sha256 "bbac1cfb789fd7d40f29555278179d7e552f447d9f164407cd1a1d2d535690db"
+      sha256 "a094054355f04990d8beb242ed42a057df673d1d9ddd6d6a4fca11eae78be52a"
     end
     on_arm do
       url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.0.0/cxg-linux-arm64"
-      sha256 "89273eda15539849bfabff116e62d93d0cb906a0849fb32de4c59db90dc766bc"
+      sha256 "6fe3604f6d05a4b8e679a21854d5f2cd151ae2a801cdd99f27aea96520cb3946"
     end
   end
 
