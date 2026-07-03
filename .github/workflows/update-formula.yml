@@ -75,8 +75,13 @@ jobs:
               bin.install Dir["cxg-*"].first => "cxg"
             end
 
-            def post_install
-              system bin/"cxg", "template", "update" rescue nil
+            def caveats
+              <<~CAVEATS
+                To download vulnerability detection templates, run:
+                  cxg template update
+
+                Templates will be installed to ~/.cert-x-gen/templates/
+              CAVEATS
             end
 
             test do
@@ -100,5 +105,9 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add Formula/cxg.rb
+          if git diff --cached --quiet; then
+            echo "Formula already up to date, nothing to commit."
+            exit 0
+          fi
           git commit -m "Update cxg to v${VERSION}"
           git push
