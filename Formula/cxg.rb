@@ -10,28 +10,28 @@
 class Cxg < Formula
   desc "Polyglot execution engine for vulnerability detection"
   homepage "https://github.com/Bugb-Technologies/cert-x-gen"
-  version "1.3.0"
+  version "1.4.0"
   license "Apache-2.0"
 
   on_macos do
     on_intel do
-      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.3.0/cxg-darwin-amd64"
-      sha256 "9fff3625373debd05eca534dd4c6af8939e934ff808e5e6fa495cdccec40cff0"
+      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.4.0/cxg-darwin-amd64"
+      sha256 "bb40d633acdb728f407b04fe3c2cd5655fe08a1059ea9ae79d1f3aa9e9cc04a2"
     end
     on_arm do
-      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.3.0/cxg-darwin-arm64"
-      sha256 "bca38858619b576210d42a6e95d5b82fc3c340c8b08da69fff8b8be31afb151c"
+      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.4.0/cxg-darwin-arm64"
+      sha256 "7e722a8ee95c8a9425c0f7e0fc477aa21d6529d76226edad8bb603f16545ffcf"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.3.0/cxg-linux-amd64"
-      sha256 "79987d541a160a90f73ec0f8844e7879ab8a1d5807f03af9d378fe7bcbd307e9"
+      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.4.0/cxg-linux-amd64"
+      sha256 "77d5b2c52fb44ccdb939bd1e10a909b388769239199ce09b9ab9414fb0a3e94e"
     end
     on_arm do
-      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.3.0/cxg-linux-arm64"
-      sha256 "91ee27d1b695f471fad65459cd54217f076c2a41593385eb21b102402adc14d4"
+      url "https://github.com/Bugb-Technologies/cert-x-gen/releases/download/v1.4.0/cxg-linux-arm64"
+      sha256 "f07c028717a6a7f293b68a5ebb8d2cf45ca4f5d74c766022696727aa9c985509"
     end
   end
 
