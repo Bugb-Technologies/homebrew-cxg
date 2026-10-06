@@ -9,7 +9,8 @@
 # overwritten by the next release.
 class Cxg < Formula
   desc "Polyglot execution engine for vulnerability detection"
-  homepage "https://github.com/Bugb-Technologies/cert-x-gen"
+  # @comment -- "brew info / brew home open the cxg product site, cxg.bugb.io"
+  homepage "https://cxg.bugb.io"
   version "1.4.0"
   license "Apache-2.0"
 
